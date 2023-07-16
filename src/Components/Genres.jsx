@@ -7,7 +7,7 @@ function Genres(props)
     
     return (
         props.element.map((item,index)=>(
-           <span key={props.key}>{item.name}</span> 
+           <li key={props.key}>{item.name}</li> 
         ))
     )
 }

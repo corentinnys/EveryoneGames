@@ -53,7 +53,12 @@ if(plateformes.length == 0){
   })
 }
 
-
+  function handleChangeSelect(e)
+  {
+   
+   
+    
+  }
 
   return(
     <Container>
@@ -78,7 +83,7 @@ if(plateformes.length == 0){
       <div class="input-group mb-3">
 
 <label class="input-group-text" for="inputGroupSelect01">Genres</label>
-<select class="form-select" id="inputGroupSelect01">
+<select class="form-select" id="inputGroupSelect01" onChange={handleChangeSelect}>
 <option selected>Choose...</option>
 {genres.map((genre,index)=>(
 <Options key={index} name={genre.name}/>
