@@ -13,17 +13,36 @@ function App() {
 
   const [plateformes ,SetPlateformes]= useState([]);
   const [genres ,SetGenres]= useState([]);
+  const [filtreGenre,SetFiltreGenre] = useState();
 
 
-if(genres.length == 0){
-  let myHeaders = new Headers();
+
+
+
+useEffect(()=>{
+  axios.get('https://api.rawg.io/api/genres?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1')
+  .then(res => {
+  SetGenres(res.data.results)
+  })
+
+  axios.get('https://api.rawg.io/api/platforms?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1')
+  .then(res =>{
+    SetPlateformes(res.data.results)
+  })
+},[])
+
+
+
+
+//if(genres.length == 0){
+  /*let myHeaders = new Headers();
 
   let myInit = { method: 'GET',
                  headers: myHeaders,
                  mode: 'cors',
                  cache: 'default' };
   
-  let myRequest = new Request('https://api.rawg.io/api/genres?token&key=1caef2900c0e4f7fa226a7fe166c67dc',myInit);
+  let myRequest = new Request('https://api.rawg.io/api/genres?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1',myInit);
   
   fetch(myRequest,myInit)
   .then(function(response) {
@@ -32,9 +51,9 @@ if(genres.length == 0){
   .then(function(json) {
     SetGenres(json.results)
   })
-}
+}*/
   
-if(plateformes.length == 0){
+/*if(plateformes.length == 0){
   let myHeaders = new Headers();
 
   let myInit = { method: 'GET',
@@ -42,7 +61,7 @@ if(plateformes.length == 0){
                  mode: 'cors',
                  cache: 'default' };
   
-  let myRequest = new Request('https://api.rawg.io/api/platforms?token&key=1caef2900c0e4f7fa226a7fe166c67dc',myInit);
+  let myRequest = new Request('https://api.rawg.io/api/platforms?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1',myInit);
   
   fetch(myRequest,myInit)
   .then(function(response) {
@@ -51,12 +70,15 @@ if(plateformes.length == 0){
   .then(function(json) {
     SetPlateformes(json.results)
   })
-}
+}*/
 
   function handleChangeSelect(e)
   {
    
-   
+ 
+   let value = e.currentTarget.value.toLowerCase();
+   SetFiltreGenre(value)
+
     
   }
 
@@ -64,10 +86,10 @@ if(plateformes.length == 0){
     <Container>
       <Row>
         <Col  sm={8}>
-         <CardItem/>
+         <CardItem  filtre={filtreGenre} />
         </Col>
         <Col sm={4}>
-          <h1>Recherche</h1>
+          <h1>Filtres</h1>
         
           <div class="input-group mb-3">
 

@@ -8,36 +8,76 @@ import PlateformItem from './PlateformItem';
 import './index.css'
 
 
-function CardItem()
+function CardItem(props)
 {
   const [games,setGames] = useState([])
+  let filtre = props.filtre;
+
+  let request = ''
+  if (filtre == undefined){
+    request = 'https://api.rawg.io/api/games?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1'
+  }else{
+     request ="https://api.rawg.io/api/games?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1&genres="+filtre
+  }
+  useEffect(()=>{
+   console.log(request)
+      axios.get(request)
+      .then(res => {
+        console.log('passe')
+      setGames(res.data.results)
+      })
+  },[filtre])
 
 
-
+/*
 if(games.length == 0){
-  var myHeaders = new Headers();
+  let myHeaders = new Headers();
 
-  var myInit = { method: 'GET',
+  let myInit = { method: 'GET',
                  headers: myHeaders,
                  mode: 'cors',
                  cache: 'default' };
+
   
-  var myRequest = new Request('https://api.rawg.io/api/games?token&key=1caef2900c0e4f7fa226a7fe166c67dc',myInit);
   
+     let myRequest = new Request('https://api.rawg.io/api/games?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1',myInit);
+  
+
+   
+
+  fetch(myRequest,myInit)
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(json) {
+    setGames(json.results)
+  })
+}*/
+
+/*
+if(props.filtreGenre !=undefined)
+{
+  let myHeaders = new Headers();
+
+  let myInit = { method: 'GET',
+                 headers: myHeaders,
+                 mode: 'cors',
+                 cache: 'default' };
+
+  let myRequest = new Request('https://api.rawg.io/api/games?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1&genres='+props.filtreGenre,myInit);
   fetch(myRequest,myInit)
   .then(function(response) {
     return response.json();
   })
   .then(function(json) {
     console.log(json)
-   setGames(json.results)
+    
+    setGames(json.results)
   })
-}
+  //console.log('passe')
 
+}*/
 
-
-
-console.log(games)
 
 return(
   <Container>

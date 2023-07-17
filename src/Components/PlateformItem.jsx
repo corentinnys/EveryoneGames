@@ -31,9 +31,6 @@ function  PlateformItem(props)
         break;
  }
   
-
-  
-
  
     return(
        <>
