@@ -12,21 +12,29 @@ function CardItem(props)
 {
   const [games,setGames] = useState([])
   let filtre = props.filtre;
+  let filterPlateform = props.plateform;
 
-  let request = ''
-  if (filtre == undefined){
+ 
+
+  
+  let request='';
+  if (filtre == undefined && filterPlateform == undefined){
     request = 'https://api.rawg.io/api/games?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1'
+  }else if (filtre == undefined && filterPlateform != undefined)
+  {
+     request = 'https://api.rawg.io/api/games?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1&platforms='+filterPlateform
+  }else if  (filtre != undefined && filterPlateform == undefined){
+    request = 'https://api.rawg.io/api/games?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1&genres='+filtre
   }else{
-     request ="https://api.rawg.io/api/games?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1&genres="+filtre
+    request ='https://api.rawg.io/api/games?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1&genres='+filtre+'&platforms='+filterPlateform
   }
   useEffect(()=>{
-   console.log(request)
       axios.get(request)
       .then(res => {
         console.log('passe')
       setGames(res.data.results)
       })
-  },[filtre])
+  },[filtre,filterPlateform])
 
 
 /*

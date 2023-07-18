@@ -1,9 +1,10 @@
 function Options(props)
 {
+   
     return(
      
      
-            <option key={props.index}>{props.name}</option>
+            <option key={props.index} value={props.dataId}>{props.name}</option>
         
     )
 } 

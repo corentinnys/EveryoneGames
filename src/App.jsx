@@ -14,6 +14,7 @@ function App() {
   const [plateformes ,SetPlateformes]= useState([]);
   const [genres ,SetGenres]= useState([]);
   const [filtreGenre,SetFiltreGenre] = useState();
+  const [filterPlateform,setFilterPlateform]=useState();
 
 
 
@@ -76,17 +77,22 @@ useEffect(()=>{
   {
    
  
-   let value = e.currentTarget.value.toLowerCase();
+   let value = e.currentTarget.value;
    SetFiltreGenre(value)
 
     
+  }
+  function handleChangeSelectPlateforms(e)
+  {
+    let value = e.currentTarget.value;
+    setFilterPlateform(value)
   }
 
   return(
     <Container>
       <Row>
         <Col  sm={8}>
-         <CardItem  filtre={filtreGenre} />
+         <CardItem  filtre={filtreGenre} plateform={filterPlateform} />
         </Col>
         <Col sm={4}>
           <h1>Filtres</h1>
@@ -94,21 +100,21 @@ useEffect(()=>{
           <div class="input-group mb-3">
 
           <label class="input-group-text" for="inputGroupSelect01">plateforms</label>
-          <select class="form-select" id="inputGroupSelect01">
+          <select class="form-select" id="inputGroupSelect01" onChange={handleChangeSelectPlateforms}>
           <option selected>Choose...</option>
          {plateformes.map((plateform,index)=>(
-          <Options key={index} name={plateform.name}/>
+          <Options key={index} name={plateform.name} dataId={plateform.id}/>
 
           ))}
       </select>
       </div>
       <div class="input-group mb-3">
 
-<label class="input-group-text" for="inputGroupSelect01">Genres</label>
-<select class="form-select" id="inputGroupSelect01" onChange={handleChangeSelect}>
+<label class="input-group-text" for="inputGroupSelect02">Genres</label>
+<select class="form-select" id="inputGroupSelect02" onChange={handleChangeSelect}>
 <option selected>Choose...</option>
 {genres.map((genre,index)=>(
-<Options key={index} name={genre.name}/>
+<Options key={index} name={genre.name}  dataId={genre.id}/>
 
 ))}
 </select>
