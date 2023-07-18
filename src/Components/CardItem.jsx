@@ -13,78 +13,36 @@ function CardItem(props)
   const [games,setGames] = useState([])
   let filtre = props.filtre;
   let filterPlateform = props.plateform;
-
- 
-
+  let search = props.search;
+  let tag = props.tag;
+console.log(tag)
   
   let request='';
-  if (filtre == undefined && filterPlateform == undefined){
-    request = 'https://api.rawg.io/api/games?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1'
+  if (filtre == undefined && filterPlateform == undefined && search == undefined && tag.length==0){
+    request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5'
   }else if (filtre == undefined && filterPlateform != undefined)
   {
-     request = 'https://api.rawg.io/api/games?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1&platforms='+filterPlateform
+     request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5f&platforms='+filterPlateform
   }else if  (filtre != undefined && filterPlateform == undefined){
-    request = 'https://api.rawg.io/api/games?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1&genres='+filtre
-  }else{
-    request ='https://api.rawg.io/api/games?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1&genres='+filtre+'&platforms='+filterPlateform
+    request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5&search='+search
   }
+  if (tag.length!=0)
+  {
+    console.log('passe in')
+    console.log(tag)
+    request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5&tags='+tag
+  }
+ 
+  
   useEffect(()=>{
       axios.get(request)
+     
       .then(res => {
-        console.log('passe')
       setGames(res.data.results)
       })
-  },[filtre,filterPlateform])
+  },[filtre,filterPlateform,search,tag])
 
 
-/*
-if(games.length == 0){
-  let myHeaders = new Headers();
-
-  let myInit = { method: 'GET',
-                 headers: myHeaders,
-                 mode: 'cors',
-                 cache: 'default' };
-
-  
-  
-     let myRequest = new Request('https://api.rawg.io/api/games?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1',myInit);
-  
-
-   
-
-  fetch(myRequest,myInit)
-  .then(function(response) {
-    return response.json();
-  })
-  .then(function(json) {
-    setGames(json.results)
-  })
-}*/
-
-/*
-if(props.filtreGenre !=undefined)
-{
-  let myHeaders = new Headers();
-
-  let myInit = { method: 'GET',
-                 headers: myHeaders,
-                 mode: 'cors',
-                 cache: 'default' };
-
-  let myRequest = new Request('https://api.rawg.io/api/games?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1&genres='+props.filtreGenre,myInit);
-  fetch(myRequest,myInit)
-  .then(function(response) {
-    return response.json();
-  })
-  .then(function(json) {
-    console.log(json)
-    
-    setGames(json.results)
-  })
-  //console.log('passe')
-
-}*/
 
 
 return(
@@ -110,12 +68,7 @@ return(
       }
 </div>
     <a href='#'class='btn btn-primary' id={element.id}>voir le jeu</a>
-  </div>
-      
-                 
-      
-    
-      
+  </div>  
   </Col>
 
 

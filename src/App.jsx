@@ -15,24 +15,31 @@ function App() {
   const [genres ,SetGenres]= useState([]);
   const [filtreGenre,SetFiltreGenre] = useState();
   const [filterPlateform,setFilterPlateform]=useState();
+  const [search,setSearch]=useState();
+  const [tagsList,setTagsList]=useState([]);
+  const [tag,setTag]=useState([]);
 
 
 
 
 
 useEffect(()=>{
-  axios.get('https://api.rawg.io/api/genres?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1')
+  axios.get('https://api.rawg.io/api/genres?token&key=fd4fe01def1f461ab24d08167b2b29f5')
   .then(res => {
   SetGenres(res.data.results)
   })
 
-  axios.get('https://api.rawg.io/api/platforms?token&key=f0bd0222c07f4b3d850d79e7cc7c68b1')
+  axios.get('https://api.rawg.io/api/platforms?token&key=fd4fe01def1f461ab24d08167b2b29f5')
   .then(res =>{
     SetPlateformes(res.data.results)
   })
+  axios.get('https://api.rawg.io/api/tags?token&key=fd4fe01def1f461ab24d08167b2b29f5')
+  .then(res=>
+    {
+      setTagsList(res.data.results)
+      
+    })
 },[])
-
-
 
 
 //if(genres.length == 0){
@@ -87,12 +94,24 @@ useEffect(()=>{
     let value = e.currentTarget.value;
     setFilterPlateform(value)
   }
+  function handleChangeSearch(e)
+  {
+    let value = e.currentTarget.value;
+    setSearch(value)
+  }
+
+  function handleChangeTags(e)
+  {
+    let name = e.currentTarget.getAttribute('data-id')
+    console.log(name)
+    setTag(name)
+  }
 
   return(
     <Container>
       <Row>
         <Col  sm={8}>
-         <CardItem  filtre={filtreGenre} plateform={filterPlateform} />
+         <CardItem tag={tag} search={search} filtre={filtreGenre} plateform={filterPlateform} />
         </Col>
         <Col sm={4}>
           <h1>Filtres</h1>
@@ -119,7 +138,16 @@ useEffect(()=>{
 ))}
 </select>
 </div>
-
+<input type="search" id="search" onChange={handleChangeSearch}/>
+{
+  tagsList.map((element,index)=>(
+   <div>
+      <input type="checkbox" data-id={element.id} name={element.name} data onChange={handleChangeTags} />
+    <label>{element.name}</label>
+  
+   </div>
+ 
+))}
         </Col>
       </Row>
       
