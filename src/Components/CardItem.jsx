@@ -1,4 +1,5 @@
 import { useEffect,useState } from 'react';
+import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import {Container,Row,Col} from 'react-bootstrap';
@@ -20,16 +21,19 @@ console.log(tag)
   let request='';
   if (filtre == undefined && filterPlateform == undefined && search == undefined && tag.length==0){
     request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5'
-  }else if (filtre == undefined && filterPlateform != undefined)
+  }else if(filtre != undefined && filterPlateform == undefined && tag.length==0)
   {
-     request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5f&platforms='+filterPlateform
-  }else if  (filtre != undefined && filterPlateform == undefined){
+    request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5&genres='+filtre
+  }
+  else if (filtre == undefined && filterPlateform != undefined && tag.length==0)
+  {
+     request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5&platforms='+filterPlateform
+  }else if  (filtre == undefined && filterPlateform == undefined && tag.length==0 & search!=undefined)
+  {
     request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5&search='+search
   }
-  if (tag.length!=0)
+  else if (tag.length!=0 & filtre == undefined && filterPlateform == undefined && search==undefined)
   {
-    console.log('passe in')
-    console.log(tag)
     request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5&tags='+tag
   }
  
@@ -67,7 +71,10 @@ return(
         ))
       }
 </div>
+<Link to={`/game/${element.id}`}>
     <a href='#'class='btn btn-primary' id={element.id}>voir le jeu</a>
+
+    </Link>
   </div>  
   </Col>
 
