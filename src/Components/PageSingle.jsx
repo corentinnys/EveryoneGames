@@ -5,17 +5,30 @@ import axios from 'axios';
 const SingleCard = () => {
   const { id } = useParams();
   const [gameData, setGameData] = useState(null);
+  const [screenShots, setScreenShots] = useState(null);
 
   useEffect(() => {
     axios
       .get(`https://api.rawg.io/api/games/${id}?token&key=fd4fe01def1f461ab24d08167b2b29f5`)
       .then(res => {
         setGameData(res.data);
-        console.log(res.data.platforms)
+        console.log(res.data)
+        
       })
       .catch(error => {
         console.log(error);
       });
+
+      axios
+      .get(`https://api.rawg.io/api/games/${id}/screenshots?token&key=fd4fe01def1f461ab24d08167b2b29f5`)
+      .then(res => {
+        setScreenShots(res.data)
+      })
+      .catch(error => {
+        console.log(error);
+      });
+
+
   }, [id]);
 
   if (!gameData) {
@@ -45,11 +58,19 @@ const SingleCard = () => {
 
         <h2>disponible sur :</h2>
         <ul>
-           
+           {gameData.platforms.map((element,index)=>(
+           <li key={index}>{element.platform.name}</li>
+           ))}
           </ul>
-        
+      <h2>screenShots</h2>  
+      <ul>
+      {screenShots.results.map((element,index)=>(
+        <li><img src={element.image}/></li>
+      ))}
+      </ul>
       <h2>Jeux similaires</h2>
-
+      <h2>Createurs</h2>
+      
     </div>
   );
 };
