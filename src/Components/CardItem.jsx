@@ -16,7 +16,7 @@ function CardItem(props)
   let filterPlateform = props.plateform;
   let search = props.search;
   let tag = props.tag;
-console.log(tag)
+
   
   let request='';
   if (filtre == undefined && filterPlateform == undefined && search == undefined && tag.length==0){

@@ -1,76 +1,91 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import Figure from 'react-bootstrap/Figure';
+// Importez la fonction 'request' depuis le fichier approprié.
+import { request } from './request';
+import CardItem from './CardItem';
 
 const SingleCard = () => {
   const { id } = useParams();
-  const [gameData, setGameData] = useState(null);
+  const [gameData, setGameData] = useState({});
   const [screenShots, setScreenShots] = useState(null);
+  const [gameSerie, setGameSerie] = useState([]);
+  const [gameDevelopment, setGameDevelopment] = useState([]);
 
   useEffect(() => {
     axios
-      .get(`https://api.rawg.io/api/games/${id}?token&key=fd4fe01def1f461ab24d08167b2b29f5`)
-      .then(res => {
-        setGameData(res.data);
-        console.log(res.data)
-        
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    .get(`https://api.rawg.io/api/games/${id}?key=fd4fe01def1f461ab24d08167b2b29f5`)
+    .then(res => {
+      setGameData(res.data); // Update this line
+    })
+    .catch(error => {
+      console.log(error);
+    });
+    
 
       axios
-      .get(`https://api.rawg.io/api/games/${id}/screenshots?token&key=fd4fe01def1f461ab24d08167b2b29f5`)
-      .then(res => {
-        setScreenShots(res.data)
-      })
-      .catch(error => {
-        console.log(error);
-      });
+        .get(`https://api.rawg.io/api/games/${id}/screenshots?key=fd4fe01def1f461ab24d08167b2b29f5`)
+        .then(res => {
+          setScreenShots(res.data.results);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
+      axios
+        .get(`https://api.rawg.io/api/games/${id}/game-series?key=fd4fe01def1f461ab24d08167b2b29f5`)
+        .then(res => {
+          setGameSerie(res.data.results);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+
+      axios
+        .get(`https://api.rawg.io/api/games/${id}/development-team?key=fd4fe01def1f461ab24d08167b2b29f5`)
+        .then(res => {
+          setGameDevelopment(res.data.results);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+   
 
 
   }, [id]);
 
-  if (!gameData) {
-    return <div>Loading...</div>;
-  }
+
 
   return (
     <div>
-        <img src={gameData.background_image}/>
-      {/* Utilisez les donnÃ©es de jeu ici */}
-      <h1>Game Name: {gameData.name}</h1>
-      <p>Release Date: {gameData.released}</p>
-      {/* ... autres informations de jeu */}
-        
-
-      {gameData.description}
+      <img src={gameData.background_image} alt="" />
+      <h1>{gameData.name}</h1>
+      <div dangerouslySetInnerHTML={{ __html: gameData.description }} />
+      <h2>Disponible sur</h2>
       <ul>
-            <li>{gameData.playtime} hours</li>
-        </ul>
-        <h2>mes reseaux</h2>
-        <ul>
-            <li>
-                <a href={gameData.reddit_url}>{gameData.reddit_name}</a>
-              
-            </li>
-        </ul>
-
-        <h2>disponible sur :</h2>
-        <ul>
-           {gameData.platforms.map((element,index)=>(
-           <li key={index}>{element.platform.name}</li>
-           ))}
-          </ul>
-      <h2>screenShots</h2>  
-      <ul>
-      {screenShots.results.map((element,index)=>(
-        <li><img src={element.image}/></li>
-      ))}
+        {gameData.platforms && gameData.platforms.length > 0 ? (
+          gameData.platforms.map((element, index) => (
+            <li key={index}>{element.platform.name}</li>
+          ))
+        ) : (
+          <li>Plateformes non disponibles</li>
+        )}
       </ul>
-      <h2>Jeux similaires</h2>
-      <h2>Createurs</h2>
-      
+      <h2>Meme series</h2>
+      <ul>
+    
+       {gameSerie.map((element,index)=>(
+        <li key={index}>{element.name}</li>
+       ))}
+      </ul>
+      <ul>
+    
+    {gameDevelopment.map((element,index)=>(
+     <li key={index}>{element.name}</li>
+    ))}
+   </ul>
+ 
     </div>
   );
 };
