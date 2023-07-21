@@ -9,6 +9,9 @@ import CardItem from './Components/CardItem';
 import Navigation from './Components/Navigation';
 
 import PageSingle from './Components/PageSingle';
+import PageSingleDev from './Components/PageSingleDev'
+import Creators from './Components/Creators';
+import CreatorSingle from './Components/CreatorSingle';
 
 function App() {
   const [plateformes, SetPlateformes] = useState([]);
@@ -96,6 +99,9 @@ function App() {
             </Row>
           } />
           <Route path="/game/:id" element={<PageSingle />} />
+          <Route path="/game/devloppers/:id" element={<PageSingleDev />} />
+          <Route path="/creators" element={<Creators />} />
+          <Route path="/creator/:id" element={<CreatorSingle />} />
         </Routes>
       </Container>
     </Router>
