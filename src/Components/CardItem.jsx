@@ -16,25 +16,33 @@ function CardItem(props)
   let filterPlateform = props.plateform;
   let search = props.search;
   let tag = props.tag;
+  let creators = props.creators
 
-  
+  console.log(creators)
   let request='';
-  if (filtre == undefined && filterPlateform == undefined && search == undefined && tag.length==0){
+  if (filtre == undefined && filterPlateform == undefined && search == undefined && tag.length==0 && creators.length == 0){
     request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5'
-  }else if(filtre != undefined && filterPlateform == undefined && tag.length==0)
+  }else if(filtre != undefined && filterPlateform == undefined && tag.length==0 && creators.length == 0)
   {
     request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5&genres='+filtre
   }
-  else if (filtre == undefined && filterPlateform != undefined && tag.length==0)
+  else if (filtre == undefined && filterPlateform != undefined && tag.length==0 && creators.length == 0)
   {
      request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5&platforms='+filterPlateform
-  }else if  (filtre == undefined && filterPlateform == undefined && tag.length==0 & search!=undefined)
+  }else if  (filtre == undefined && filterPlateform == undefined && tag.length==0 & search!=undefined && creators.length == 0)
   {
     request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5&search='+search
   }
-  else if (tag.length!=0 & filtre == undefined && filterPlateform == undefined && search==undefined)
+  else if (tag.length!=0 & filtre == undefined && filterPlateform == undefined && search==undefined && creators.length == 0)
   {
     request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5&tags='+tag
+  }
+  else if(creators.length!=0 &filtre == undefined && filterPlateform == undefined && tag.length==0 & search!=undefined)
+  {
+    request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5&creators='+creators
+  }
+  {
+
   }
  
   
@@ -49,41 +57,64 @@ function CardItem(props)
 
 
 
-return(
-  <Container>
-    <Row>
-    <div class="card-group">
-    {games.map((element, index) => (
-      <Col xs={6} >
-          <div class="card">
-    <img class="card-img-top" src={element.background_image} alt="Card image cap"/>
-    <div class="card-body">
-      <h5 class="card-title">{element.name}</h5>
-      <Genres key={index} element={element.genres}/>
-    </div>
-    <h2>Disponible sur :</h2>
-    <div className='flexContainer'>
-    {
-        element.parent_platforms.map((items,index)=>(
-          <PlateformItem elements={items} index={index}/>
-         
-       
-        ))
-      }
-</div>
-<Link to={`/game/${element.id}`}>
-    <a href='#'class='btn btn-primary' id={element.id}>voir le jeu</a>
 
-    </Link>
-  </div>  
-  </Col>
-
-
-))}
-</div>
-    </Row>
-  </Container>
-  )
+  return (
+    <Container>
+      <Row>
+      {games.map((element, index) => (
+        <Col>
+      <div className="flip-card-container">
+      <div className="flip-card">
+        <div className="card-front">
+          <figure>
+            <div className="img-bg"></div>
+            <img src={element.background_image} alt="Brohm Lake"/>
+            <figcaption>{element.name}</figcaption>
+          </figure>
   
+          <ul>
+           <Genres key={index} element={element.genres}/>
+            <li>
+            {
+element.parent_platforms.map((items,index)=>(
+<PlateformItem elements={items} index={index}/>
+))
+}
+            </li>
+          </ul>
+        </div>
+  
+        <div className="card-back">
+          <figure>
+            <div className="img-bg"></div>
+            <img src={element.background_image} alt="Brohm Lake"/>
+          </figure>
+  
+          <Link to={`/game/${element.id}`}>
+<a href='#'class='btn btn-primary' id={element.id}>voir le jeu</a>
+
+</Link>
+  
+          <div className="design-container">
+            <span className="design design--1"></span>
+            <span className="design design--2"></span>
+            <span className="design design--3"></span>
+            <span className="design design--4"></span>
+            <span className="design design--5"></span>
+            <span className="design design--6"></span>
+            <span className="design design--7"></span>
+            <span className="design design--8"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    </Col>
+      ))}
+      </Row>
+    </Container>
+  );
+  
+  
+ 
   }
 export default CardItem

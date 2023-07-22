@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import './creators.css'
+import {Container,Row,Col} from 'react-bootstrap';
 
 function Creators() {
   // You can add state, useEffect, and other logic related to creators here
@@ -19,27 +21,33 @@ useEffect(()=>{
 },[])
 
   return (
-    <div>
-      <h1>les createurs </h1>
-      {/* Add additional content related to creators */}
-      {/* For example, you can display a list of creators */}
-      <ul>
-        {data.map((element,index)=>(
-            <li>
-                {element.name}
-                <img src={element.image}/>
+    <Container>
+      <Row>
+        <h1>Liste des createurs</h1>
+    {data.map((element,index)=>(
+      <Col sm={3}>
+      <Link to={`/creator/${element.id}`}>
+<a href='#'id={element.id} >
+  
+   <div className="card">
+     <div class="wrapper">
+       <img src={element.image} className="cover-image" />
+     </div> 
+     <img src={element.image} className="character" />
+   </div>
+   <div class='text-center  text-primary'>
+    {element.name}
+   </div>
+   </a>
 
-                <Link to={`/creator/${element.id}`}>
-    <a href='#'class='btn btn-primary' id={element.id}>creator</a>
+</Link>
+ </Col>
+    ))}
+    </Row>
+    </Container>
+ 
 
-    </Link>
-               
-            </li>
-        ))}
-        {/* Add more creators as needed */}
-      </ul>
-    </div>
-  );
+  )   
 }
 
 export default Creators;

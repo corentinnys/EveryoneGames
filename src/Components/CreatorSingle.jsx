@@ -1,10 +1,16 @@
 import { useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import {Container,Row,Col, Collapse} from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
 
+import './creatorSingle.css'
 function CreatorSingle() {
   const [data, setData] = useState([]);
-  const [game, setGame] = useState([])
+  const [game, setGame] = useState([]);
+  const[gameData, setGameData] = useState([])
   const { id } = useParams();
 
   useEffect(() => {
@@ -24,29 +30,66 @@ function CreatorSingle() {
    //console.log(res.data.results[0].games)
    for ( const items of res.data.results )
    {
-    console.log(items)
+   
         if (items.id == id){
             setGame(items.games)
-            //console.log(items.games)
+            let array = [];
+            for (const gameID  of items.games)
+            {
+                axios
+                .get('https://api.rawg.io/api/games/'+gameID.id+'?key=fd4fe01def1f461ab24d08167b2b29f5')
+                .then(res => {
+                   array.push(res.data)
+                 })
+                 .catch(error => {
+                    console.log(error);
+                  })
+            }
+            setGameData(array)
+           
+    
         }
    }
-   console.log(res.data.results[0].id)
+  
       })
       .catch(error => {
         console.log(error);
       });
+
+
+
+
   }, [id]);
 
+console.log(gameData.slug)
+
   return (
-    <>
-      <h1>nom : {data.name}</h1>
-      <img src={data.image} alt={data.name} />
-      <div dangerouslySetInnerHTML={{ __html: data.description }} />
-      {game.map((element,index)=>(
-       <span> {element.name}</span> 
+    <Container>
+        <Row>
+            <Col sm={3}>
+            <img src={data.image} alt={data.name} />
+            </Col>
+            <Col sm={9}>
+            <h1>{data.name}</h1>
+            <div dangerouslySetInnerHTML={{ __html: data.description }} />
+            </Col >
+
       
+     
+    <h2>Jeux realiser</h2>
+      {gameData.map((element,index)=>(
+        <Col sm={2}>
+        <Link to={`/game/${element.id}`}>
+      <img src={element.background_image}/>  
+     
+        
+
+</Link>
+  
+       </Col>
       ))}
-    </>
+      </Row>
+    </Container>
   );
 }
 

@@ -21,6 +21,8 @@ function App() {
   const [search, setSearch] = useState();
   const [tagsList, setTagsList] = useState([]);
   const [tag, setTag] = useState([]);
+  const [creators,setCreators]= useState([])
+  const [filtreCreators,setFilreCreators]= useState([])
 
   useEffect(() => {
     axios.get('https://api.rawg.io/api/genres?token&key=fd4fe01def1f461ab24d08167b2b29f5')
@@ -36,6 +38,17 @@ function App() {
       .then(res => {
         setTagsList(res.data.results)
       })
+
+      axios
+      .get(`https://api.rawg.io/api/creators?key=fd4fe01def1f461ab24d08167b2b29f5`)
+      .then(res => {
+        setCreators(res.data.results); // Update this line
+      })
+      .catch(error => {
+        console.log(error);
+      })
+
+
   }, [])
 
   function handleChangeSelect(e) {
@@ -57,7 +70,11 @@ function App() {
     let name = e.currentTarget.getAttribute('data-id')
     setTag(name)
   }
-
+  function handleChangeCreators(e)
+  {
+    let value = e.currentTarget.getAttribute('data-id')
+    setFilreCreators(value)
+  }
   return (
     <Router>
       <Container>
@@ -66,7 +83,7 @@ function App() {
           <Route path="/" element={
             <Row>
               <Col sm={8}>
-                <CardItem tag={tag} search={search} filtre={filtreGenre} plateform={filterPlateform} />
+                <CardItem tag={tag} search={search} filtre={filtreGenre} plateform={filterPlateform} creators={filtreCreators} />
               </Col>
               <Col sm={4}>
                 <h1>Filtres</h1>
@@ -92,6 +109,16 @@ function App() {
                 {tagsList.map((element, index) => (
                   <div>
                     <input type="checkbox" data-id={element.id} name={element.name} data onChange={handleChangeTags} />
+                    <label key={index}>{element.name}</label>
+                  </div>
+                ))}
+
+                <h2>les createurs</h2>
+
+                {creators.map((element,index)=>
+                (
+                  <div>
+                    <input type="checkbox" data-id={element.id} name={element.name}  onChange={handleChangeCreators}/>
                     <label key={index}>{element.name}</label>
                   </div>
                 ))}

@@ -5,6 +5,7 @@ import Figure from 'react-bootstrap/Figure';
 import { Col, Container, Row } from 'react-bootstrap';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Link } from 'react-router-dom';
+import Table from 'react-bootstrap/Table';
 
 const SingleCard = () => {
   const { id } = useParams();
@@ -13,6 +14,8 @@ const SingleCard = () => {
   const [gameSerie, setGameSerie] = useState([]);
   const [gameDevelopment, setGameDevelopment] = useState([]);
   const [gameMovie, setGameMovie] = useState([]);
+  const [plateformes ,SetPlateformes] = useState([])
+
 
   useEffect(() => {
     axios
@@ -24,15 +27,17 @@ const SingleCard = () => {
         console.log(error);
       });
 
-    axios
+
+      axios
       .get(`https://api.rawg.io/api/games/${id}/screenshots?key=fd4fe01def1f461ab24d08167b2b29f5`)
       .then(res => {
+        console.log('Screenshots API Response:', res.data);
         setScreenShots(res.data.results);
       })
       .catch(error => {
-        console.log(error);
+        console.log('Screenshots API Error:', error);
       });
-
+      
     axios
       .get(`https://api.rawg.io/api/games/${id}/game-series?key=fd4fe01def1f461ab24d08167b2b29f5`)
       .then(res => {
@@ -59,15 +64,37 @@ const SingleCard = () => {
       .catch(error => {
         console.log(error);
       });
+
+
+
+      axios.get('https://api.rawg.io/api/platforms?token&key=fd4fe01def1f461ab24d08167b2b29f5')
+      .then(res => {
+        SetPlateformes(res.data.results)
+      })
+
+
+
+
   }, [id]);
 
   return (
-    <>
-      <img src={gameData.background_image} alt="" />
-      <h1>{gameData.name}</h1>
+    <Container>
+      <Row>
+        <Col>
+        <img src={gameData.background_image} alt="" />
+        </Col>
+        <Col>
+        <h1>{gameData.name}</h1>
       <div dangerouslySetInnerHTML={{ __html: gameData.description }} />
+        </Col>
+      </Row>
+
+     
+
       <h2>Disponible sur</h2>
-      <ListGroup>
+      <Row>
+        <Col >
+        <ListGroup horizontal>
         {gameData.platforms && gameData.platforms.length > 0 ? (
           gameData.platforms.map((element, index) => (
             <ListGroup.Item key={index}>{element.platform.name}</ListGroup.Item>
@@ -77,6 +104,23 @@ const SingleCard = () => {
         )}
       </ListGroup>
 
+        </Col>
+      </Row>
+      <Row>
+      {screenShots !== null ? (
+  screenShots.map((element, index) => (
+    <Col key={index}>
+      <img src={element.image} alt={`Screenshot ${index + 1}`} />
+    </Col>
+  ))
+) : (
+  <p>Loading screenshots...</p>
+)}
+    
+</Row>
+      
+
+      
 
       <ul>
         {gameSerie && gameSerie.length > 0 ? (
@@ -88,23 +132,7 @@ const SingleCard = () => {
 
       <h2>Team development</h2>
 
-      <Container>
-        <Row>
-          {gameDevelopment.map((element, index) => (
-            <Col key={index}>
-              <Figure>
-                <Figure.Image src={element.image} alt={element.name} />
-                <Figure.Caption>{element.name}</Figure.Caption>
-
-                <Link to={`/game/devloppers/${element.id}`}>
-                  <a href='#'class='btn btn-primary'>voir le profils</a>
-               </Link>
-                
-              </Figure>
-            </Col>
-          ))}
-        </Row>
-      </Container>
+     
 
       <h2>Movies</h2>
       {gameMovie.map((element, index) => (
@@ -114,7 +142,7 @@ const SingleCard = () => {
       ))}
        
       
-    </>
+    </Container>
   );
 };
 
