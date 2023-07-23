@@ -12,13 +12,14 @@ import './index.css'
 function CardItem(props)
 {
   const [games,setGames] = useState([])
+    const [hasMore, setHasMore] = useState(true);
   let filtre = props.filtre;
   let filterPlateform = props.plateform;
   let search = props.search;
   let tag = props.tag;
   let creators = props.creators
+  let page = 1
 
-  console.log(creators)
   let request='';
   if (filtre == undefined && filterPlateform == undefined && search == undefined && tag.length==0 && creators.length == 0){
     request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5'
@@ -41,12 +42,16 @@ function CardItem(props)
   {
     request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5&creators='+creators
   }
+  else if(filtre != undefined && filterPlateform != undefined && tag.length==0 && creators.length == 0)
   {
-
+    request = 'https://api.rawg.io/api/games?token&key=fd4fe01def1f461ab24d08167b2b29f5&genres='+filtre+'&platforms='+filterPlateform
   }
+  
  
   
   useEffect(()=>{
+
+    window.addEventListener('scroll',handleScroll)
       axios.get(request)
      
       .then(res => {
@@ -54,7 +59,26 @@ function CardItem(props)
       })
   },[filtre,filterPlateform,search,tag])
 
-
+  const handleScroll = () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight && hasMore) {
+      console.log('Fetching more data...');
+      const nextPage = page + 1; // Increment the page
+      axios
+        .get(`${request}&page=${nextPage}`) // Include the updated page in the API request
+        .then(res => {
+          if (res.data.results.length > 0) {
+            // If new data is available, add it to the existing games list
+            setGames(prevGames => [...prevGames, ...res.data.results]);
+          } else {
+            // If no new data, set hasMore to false to stop infinite scrolling
+            setHasMore(false);
+          }
+        })
+        .catch(error => {
+          console.log('Error fetching more data:', error);
+        });
+    }
+  };
 
 
 
@@ -79,7 +103,7 @@ function CardItem(props)
 element.parent_platforms.map((items,index)=>(
 <PlateformItem elements={items} index={index}/>
 ))
-}
+} 
             </li>
           </ul>
         </div>
@@ -95,16 +119,7 @@ element.parent_platforms.map((items,index)=>(
 
 </Link>
   
-          <div className="design-container">
-            <span className="design design--1"></span>
-            <span className="design design--2"></span>
-            <span className="design design--3"></span>
-            <span className="design design--4"></span>
-            <span className="design design--5"></span>
-            <span className="design design--6"></span>
-            <span className="design design--7"></span>
-            <span className="design design--8"></span>
-          </div>
+          
         </div>
       </div>
     </div>

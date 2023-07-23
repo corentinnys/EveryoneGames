@@ -89,7 +89,18 @@ const SingleCard = () => {
         </Col>
       </Row>
 
-     
+      <Row>
+      {screenShots !== null ? (
+  screenShots.map((element, index) => (
+    <Col key={index}>
+      <img src={element.image} alt={`Screenshot ${index + 1}`} />
+    </Col>
+  ))
+) : (
+  <p>Loading screenshots...</p>
+)}
+    
+</Row>
 
       <h2>Disponible sur</h2>
       <Row>
@@ -106,18 +117,7 @@ const SingleCard = () => {
 
         </Col>
       </Row>
-      <Row>
-      {screenShots !== null ? (
-  screenShots.map((element, index) => (
-    <Col key={index}>
-      <img src={element.image} alt={`Screenshot ${index + 1}`} />
-    </Col>
-  ))
-) : (
-  <p>Loading screenshots...</p>
-)}
-    
-</Row>
+     
       
 
       
