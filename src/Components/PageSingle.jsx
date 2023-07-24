@@ -6,6 +6,8 @@ import { Col, Container, Row } from 'react-bootstrap';
 import ListGroup from 'react-bootstrap/ListGroup';
 import { Link } from 'react-router-dom';
 import Table from 'react-bootstrap/Table';
+import Cards from './Cards';
+
 
 const SingleCard = () => {
   const { id } = useParams();
@@ -117,18 +119,14 @@ const SingleCard = () => {
 
         </Col>
       </Row>
-     
-      
-
-      
-
-      <ul>
-        {gameSerie && gameSerie.length > 0 ? (
-          gameSerie.map((element, index) => <li key={index}>{element.name}</li>)
-        ) : (
-          <li>pas de serie similaire</li>
-        )}
-      </ul>
+     <Container>
+          <Row>
+            <h2>Jeux de la meme serie</h2>
+          {gameSerie.map((element, index)=>(
+              <Cards element={element} index={index}/>
+          )) }
+          </Row>
+     </Container>
 
       <h2>Team development</h2>
 

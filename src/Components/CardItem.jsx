@@ -6,6 +6,7 @@ import {Container,Row,Col} from 'react-bootstrap';
 import axios from 'axios';
 import Genres from './Genres';
 import PlateformItem from './PlateformItem';
+import Cards from './Cards';
 import './index.css'
 
 
@@ -61,7 +62,6 @@ function CardItem(props)
 
   const handleScroll = () => {
     if (window.innerHeight + window.scrollY >= document.body.offsetHeight && hasMore) {
-      console.log('Fetching more data...');
       const nextPage = page + 1; // Increment the page
       axios
         .get(`${request}&page=${nextPage}`) // Include the updated page in the API request
@@ -86,44 +86,8 @@ function CardItem(props)
     <Container>
       <Row>
       {games.map((element, index) => (
-        <Col>
-      <div className="flip-card-container">
-      <div className="flip-card">
-        <div className="card-front">
-          <figure>
-            <div className="img-bg"></div>
-            <img src={element.background_image} alt="Brohm Lake"/>
-            <figcaption>{element.name}</figcaption>
-          </figure>
+       <Cards element={element} index={index}/>
   
-          <ul>
-           <Genres key={index} element={element.genres}/>
-            <li>
-            {
-element.parent_platforms.map((items,index)=>(
-<PlateformItem elements={items} index={index}/>
-))
-} 
-            </li>
-          </ul>
-        </div>
-  
-        <div className="card-back">
-          <figure>
-            <div className="img-bg"></div>
-            <img src={element.background_image} alt="Brohm Lake"/>
-          </figure>
-  
-          <Link to={`/game/${element.id}`}>
-<a href='#'class='btn btn-primary' id={element.id}>voir le jeu</a>
-
-</Link>
-  
-          
-        </div>
-      </div>
-    </div>
-    </Col>
       ))}
       </Row>
     </Container>
